@@ -34,6 +34,7 @@ SUPPORT_WEBACK = (
     | SUPPORT_STATUS
     | SUPPORT_SEND_COMMAND
     | SUPPORT_FAN_SPEED
+    | SUPPORT_MOP_SPEEDS
 )
 
 ATTR_ERROR = "error"
@@ -146,8 +147,17 @@ class WebackVacuum(VacuumEntity):
     @property
     def fan_speed_list(self):
         """Get the list of available fan speed steps of the vacuum cleaner."""
-
         return [wb_vacuum.FAN_SPEED_QUIET, wb_vacuum.FAN_SPEED_NORMAL, wb_vacuum.FAN_SPEED_HIGH]
+    
+    @property
+    def mop_speed(self):
+        """Return the mop speed of the vacuum cleaner."""
+        return self.device.shadow.get("water_level")
+
+    @property
+    def mop_speed_list(self):
+        """Get the list of available mop speed steps of the vacuum cleaner."""
+        return [wb_vacuum.MOP_SPEED_LOW, wb_vacuum.MOP_SPEED_NORMAL, wb_vacuum.MOP_SPEED_HIGH]
 
     def turn_on(self, **kwargs):
         """Turn the vacuum on and start cleaning."""
@@ -170,6 +180,11 @@ class WebackVacuum(VacuumEntity):
         """Set fan speed."""
         if self.is_on:
             self.device.publish_single("fan_status", fan_speed)
+            
+    def set_fan_speed(self, mop_speed, **kwargs):
+        """Set mop speed."""
+        if self.is_on:
+            self.device.publish_single("water_level", mop_speed)
 
     def send_command(self, command, params=None, **kwargs):
         """Send a command to a vacuum cleaner."""

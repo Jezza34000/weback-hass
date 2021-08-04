@@ -147,7 +147,7 @@ class WebackVacuum(VacuumEntity):
     def fan_speed_list(self):
         """Get the list of available fan speed steps of the vacuum cleaner."""
 
-        return [wb_vacuum.FAN_SPEED_NORMAL, wb_vacuum.FAN_SPEED_HIGH]
+        return [wb_vacuum.FAN_SPEED_QUIET, wb_vacuum.FAN_SPEED_NORMAL, wb_vacuum.FAN_SPEED_HIGH]
 
     def turn_on(self, **kwargs):
         """Turn the vacuum on and start cleaning."""
